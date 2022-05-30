@@ -116,8 +116,7 @@ function writeArticle() {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },
-    data: {         
-      // articleId,   
+    data: {               
       date,
       user, 
       title, 

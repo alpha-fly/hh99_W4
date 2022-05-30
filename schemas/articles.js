@@ -1,7 +1,4 @@
 const mongoose = require("mongoose");
-// const autoIncrement = require('mongoose-auto-increment');  // 글번호 (articleId) 자동 증가
-// autoIncrement.initialize(mongoose.connection);
-
 const articlesSchema = mongoose.Schema(
 {
     articleId: {
@@ -29,14 +26,6 @@ const articlesSchema = mongoose.Schema(
         required: true,
     },    
 });
-
-// articlesSchema.plugin(autoIncrement.plugin, {
-//     model: 'Articles',
-//     field: 'articleId',
-//     startAt: 1, 
-//     increment: 1 
-// });
-
 module.exports = mongoose.model("Articles", articlesSchema);
 
 
