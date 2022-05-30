@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const commentsSchema = mongoose.Schema({
     commentId: {
         type: Number,

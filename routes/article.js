@@ -31,7 +31,7 @@ router.post("/new_article", authMiddleware, async (req, res) => {
   if (title==="" || content=== "") {
     return res.status(400).json({ success : false, errormessage : "제목과 내용을 입력해주세요."});
   }
-
+  //게시글id articlesId 자동 카운팅
   let counter = await Counters.findOne({name:'Articles'}).exec();
   if(!counter) {
     counter = await Counters.create({name:'Articles', count:0});
@@ -120,6 +120,7 @@ router.delete("/:articleId", authMiddleware, async (req, res) => {
   res.json({success: true, message: "게시글을 삭제하였습니다."});
 });
 
+
 // 댓글 작성 API (*로그인!)
 router.post("/comment/:articleId", authMiddleware, async (req, res) => {    
   const { articleId } = req.params;
@@ -130,7 +131,7 @@ router.post("/comment/:articleId", authMiddleware, async (req, res) => {
   if (mention==="") {
     return res.status(400).json({ success : false, errormessage : "댓글의 내용을 입력해주세요."});
   }
-  
+  //댓글id commentId 자동 카운팅
   let counter = await Counters.findOne({name:'Comments'}).exec();
   if(!counter) {
     counter = await Counters.create({name:'Comments', count:0});
@@ -149,12 +150,9 @@ router.post("/comment/:articleId", authMiddleware, async (req, res) => {
     }
   );     
 
- 
-
   res.json({ message: "댓글을 작성했습니다." });
 });
 
-module.exports = router;
 
 // 댓글 조회 API (no login!!) 
 router.get("/comment/:articleId", async (req,res) => {                   
@@ -221,9 +219,10 @@ router.put("/comment/:commentId", authMiddleware, async (req, res) => {
       { $set: { mention }});
   } else {
     return res.status(401).json({ success : false, errormessage : "작성자만 수정할 수 있습니다."});
-  }
-
-  
+  }  
   
   res.json({success: true, message: "댓글을 수정하였습니다."});
 });
+
+
+module.exports = router;
