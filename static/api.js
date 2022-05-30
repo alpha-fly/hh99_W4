@@ -37,7 +37,7 @@ function deleteArticle(articleId) {
     error: function (xhr, status, error) {
       if (xhr.status == 400 || xhr.status == 401) {
         alert('작성자만 삭제할 수 있습니다.');
-      }      
+      }         
     },       
     success: function (response) {                  
         alert(response['message'])
@@ -84,9 +84,14 @@ function reviseArticle(articleId) {
       content      
     },
     error: function (xhr, status, error) {
+      if (xhr.status == 401) {
+        alert("작성자만 수정할 수 있습니다");
+      }      
+
       if (xhr.status == 400) {
-        alert(message);
+        alert("제목과 내용을 입력해주세요");
       }
+
       window.location.reload();
     },     
     success: function (response) {                  
@@ -119,7 +124,18 @@ function writeArticle() {
       title, 
       content, 
   
-    },   
+    },
+    error: function (xhr, status, error) {
+      if (xhr.status == 401) {
+        alert("로그인이 필요한 기능입니다.");
+      }
+      
+      if (xhr.status == 400) {
+        alert("제목과 내용을 입력해주세요");
+      }
+
+      window.location.reload();
+    },     
     success: function (response) {                  
         alert(response['message'])
         window.location.href ='/'      
@@ -179,8 +195,13 @@ function comment() {
     },
     error: function (xhr, status, error) {
       if (xhr.status == 401) {
-        alert("로그인 해주세요.");
+        alert("로그인 해주세요.");        
       }
+
+      if (xhr.status == 400) {
+        alert("댓글 내용을 입력해주세요.");        
+      }       
+
       window.location.reload();
     },    
     success: function (response) {                  
@@ -214,9 +235,9 @@ function deleteComment(commentId) {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },    
     error: function (xhr, status, error) {
-      if (xhr.status == 400 || xhr.status == 401) {
+      if (xhr.status == 401) {
         alert('작성자만 삭제할 수 있습니다.');
-      }      
+      }       
     },       
     success: function (response) {                  
         alert(response['message'])
@@ -239,9 +260,14 @@ function reviseComment(commentId) {
       mention           
     },
     error: function (xhr, status, error) {
-      if (xhr.status == 400) {
+      if (xhr.status == 401) {
         alert("작성자만 수정할 수 있습니다.");
       }
+
+      if (xhr.status == 400) {
+        alert("댓글 내용을 입력해주세요.");
+        
+      } 
       window.location.reload();
     },     
     success: function (response) {                  

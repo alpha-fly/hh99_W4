@@ -64,7 +64,7 @@ router.get("/revise_check/:articleId", authMiddleware, async (req, res) => {
   console.log (articleId, user, article[0]["user"])
   
   if (user !== article[0]["user"]) { 
-    return res.status(400).json({ success : false, errormessage : "작성자만 수정할 수 있습니다."});
+    return res.status(401).json({ success : false, errormessage : "작성자만 수정할 수 있습니다."});
   }
 
   res.json({success: true});
@@ -87,7 +87,7 @@ router.put("/:articleId", authMiddleware, async (req, res) => {
       await Articles.updateOne({ articleId: Number(articleId)}, 
         { $set: { title, content }});
     } else {
-      return res.status(400).json({ success : false, errormessage : "작성자만 수정할 수 있습니다."});
+      return res.status(401).json({ success : false, errormessage : "작성자만 수정할 수 있습니다."});
     }  
     res.json({success: true, message: "게시글을 수정하였습니다."});
 
@@ -104,7 +104,7 @@ router.delete("/:articleId", authMiddleware, async (req, res) => {
   if (user === article[0]["user"]) {
     await Articles.deleteOne({articleId: Number(articleId)});           
   } else {
-    return res.status(400).json({ success : false, errormessage : "작성자만 삭제할 수 있습니다."});
+    return res.status(401).json({ success : false, errormessage : "작성자만 삭제할 수 있습니다."});
   }
   
   res.json({success: true, message: "게시글을 삭제하였습니다."});
@@ -118,6 +118,9 @@ router.post("/comment/:articleId", authMiddleware, async (req, res) => {
   const { commentId, date, mention } = req.body;  
   let user = res.locals.user.nickname; 
   
+  if (mention==="") {
+    return res.status(400).json({ success : false, errormessage : "댓글의 내용을 입력해주세요."});
+  }
   
   const writtenComment = await Comments.create(
     {
@@ -129,6 +132,8 @@ router.post("/comment/:articleId", authMiddleware, async (req, res) => {
     }
   );     
 
+ 
+
   res.json({ message: "댓글을 작성했습니다." });
 });
 
@@ -139,7 +144,7 @@ router.get("/comment/:articleId", async (req,res) => {
   const { articleId }= req.params;
   const all_comments = await Comments.find();  
   //여기부터
-  const filtered_comments = await filter(all_comments , async item => {
+  const filtered_comments = await asyncFilter(all_comments , async item => {
     await doAsyncStuff()
     return item["location"] == Number(articleId)
   })
@@ -148,7 +153,7 @@ router.get("/comment/:articleId", async (req,res) => {
     return Promise.resolve()
   }
   
-  async function filter(arr, callback) {
+  async function asyncFilter(arr, callback) {
     const fail = Symbol()
     return (await Promise.all(arr.map(async item => (await callback(item)) ? item : fail))).filter(i=>i!==fail)
   }
@@ -175,7 +180,7 @@ router.delete("/comment/:commentId", authMiddleware, async (req, res) => {
   if (user === comment[0]["user"]) {
     await Comments.deleteOne({commentId: Number(commentId)});           
   } else {
-    return res.status(400).json({ success : false, errormessage : "작성자만 삭제할 수 있습니다."});
+    return res.status(401).json({ success : false, errormessage : "작성자만 삭제할 수 있습니다."});
   }
   
   res.json({success: true, message: "댓글을 삭제하였습니다."});
@@ -186,6 +191,10 @@ router.delete("/comment/:commentId", authMiddleware, async (req, res) => {
 router.put("/comment/:commentId", authMiddleware, async (req, res) => {
   const { commentId } = req.params;
   const { mention } = req.body;
+
+  if (mention==="") {
+    return res.status(400).json({ success : false, errormessage : "댓글의 내용을 입력해주세요."});
+  }
   
   let user = res.locals.user.nickname; 
   const comment = await Comments.find({commentId: Number(commentId)});  
@@ -194,8 +203,10 @@ router.put("/comment/:commentId", authMiddleware, async (req, res) => {
     await Comments.updateOne({ commentId: Number(commentId)}, 
       { $set: { mention }});
   } else {
-    return res.status(400).json({ success : false, errormessage : "작성자만 수정할 수 있습니다."});
+    return res.status(401).json({ success : false, errormessage : "작성자만 수정할 수 있습니다."});
   }
+
+  
   
   res.json({success: true, message: "댓글을 수정하였습니다."});
 });
