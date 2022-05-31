@@ -48,7 +48,6 @@
     <title>알파플라이의 게시판 | 게시글 상세 조회 </title>
   </head>
 
-
   <body>
     <nav
       class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end"
@@ -133,16 +132,16 @@
         function make_card(item) {
           let date = new Date(item["date"]).toLocaleString();                
           let htmlTemp = `<div id="comments" style="margin-top: 35px; margin-bottom: 35px;">
-                          <div class="d-flex w-100 justify-content-between">
-                          <div id="comment${item["commentId"]}">
-                          <h5 id="og_comment${item["commentId"]}" class="mb-1" >${item["mention"]}</h5>
-                          </div>
-                          <small class="text-muted">${date}</small></div>
-                          <p class="mb-1">${item["user"]}</p>
-                          <small class="text-muted">
-                          <button id="rev_button${item["commentId"]}" onclick="makeReviseWindow(${item["commentId"]})">수정</button>
-                          <button id="del_button${item["commentId"]}" onclick="deleteComment(${item["commentId"]})">삭제</button>
-                          </small>                          
+                            <div class="d-flex w-100 justify-content-between">
+                              <div id="comment${item["commentId"]}">
+                              <h5 id="og_comment${item["commentId"]}" class="mb-1" >${item["mention"]}</h5>
+                            </div>
+                            <small class="text-muted">${date}</small></div>
+                            <p class="mb-1">${item["user"]}</p>
+                            <small class="text-muted">
+                              <button id="rev_button${item["commentId"]}" onclick="makeReviseWindow(${item["commentId"]})">수정</button>
+                              <button id="del_button${item["commentId"]}" onclick="deleteComment(${item["commentId"]})">삭제</button>
+                            </small>                          
                           </div>`    
           $("#commentsList").append(htmlTemp);
         }         
@@ -150,7 +149,6 @@
 
         //댓글 수정창 만들기
         function makeReviseWindow (commentId) { 
-
           let htmlTemp =`<div class="input-group mb-3" style="margin-top:20px;">                        
                         <button class="btn btn-outline-secondary" type="button" id="button-addon1" onclick = "reviseComment(${commentId})">댓글수정</button>
                         <input id="mention" type="text" class="form-control" placeholder="수정할 댓글을 남겨주세요" aria-label="Example text with button addon" aria-describedby="button-addon1">                        
