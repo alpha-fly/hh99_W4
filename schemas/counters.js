@@ -1,15 +1,12 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const countersSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true,        
+        required: true,
     },
     count: {
-        type: Number,                
-    },         
+        type: Number,
+    },
 });
-
-module.exports = mongoose.model("Counters", countersSchema);
-
-
+module.exports = mongoose.model('Counters', countersSchema);
